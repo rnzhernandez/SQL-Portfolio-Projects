@@ -1,4 +1,3 @@
-
 --1. How many vendors did the company place orders with that had a credit rating greater than 2?
 SELECT COUNT(DISTINCT poh.VendorID) AS VendorCount
 FROM Purchasing.PurchaseOrderHeader poh
@@ -13,7 +12,6 @@ JOIN Purchasing.vVendorWithAddresses va ON v.BusinessEntityID = va.BusinessEntit
 WHERE va.StateProvinceName = 'Washington';
 
 
-
 --3. How many distinct orders made in 2012 that have been either shipped by “Truck” or “Cargo Ship”? Display also the total quantity.
 SELECT COUNT(DISTINCT poh.PurchaseOrderID) AS OrderCount, 
        SUM(pod.OrderQty) AS TotalQuantity
@@ -22,6 +20,7 @@ JOIN Purchasing.PurchaseOrderDetail pod ON poh.PurchaseOrderID = pod.PurchaseOrd
 JOIN Purchasing.ShipMethod sm ON poh.ShipMethodID = sm.ShipMethodID
 WHERE YEAR(poh.OrderDate) = 2012
 AND (sm.Name LIKE '%Truck%' OR sm.Name LIKE '%Cargo%');
+
 
 --4. Display vendors name, state and its latest receipt cost in descending order of both standard price and average lead times.
 SELECT v.Name, va.StateProvinceName, pv.LastReceiptCost
@@ -55,7 +54,6 @@ GROUP BY v.Name
 ORDER BY TotalOrderedQuantity DESC;
 
 
-
 --7. The company wants to choose the best vendor for each shipping type to process orders faster that can improve the company sales and reputation. To help the manager suggest these vendors, you are required to propose a criterion/criteria with justification, and write code to find the answer. Your answer must not be an empty table.
 SELECT sm.Name AS ShippingType, 
        v.Name AS BestVendor, 
@@ -79,6 +77,7 @@ JOIN Purchasing.ProductVendor pv ON v.BusinessEntityID = pv.BusinessEntityID
 GROUP BY v.Name
 ORDER BY TotalOrders DESC, MinLeadTime ASC;
 
+
 --9 The company wants to know the most popular efficient and price effective vendor. You are required to propose a criterion/criteria to define, and write code to find the answer. Your answer must not be an empty table.
 SELECT TOP 1 v.Name AS BestVendor, 
               SUM(pod.OrderQty) AS TotalOrders, 
@@ -90,7 +89,6 @@ JOIN Purchasing.Vendor v ON poh.VendorID = v.BusinessEntityID
 JOIN Purchasing.ProductVendor pv ON v.BusinessEntityID = pv.BusinessEntityID
 GROUP BY v.Name
 ORDER BY TotalOrders DESC, MinLeadTime ASC, BestPrice ASC;
-
 
 
 -- 10 Based on the answer of Question 4.9, what is the average order fulfillment cost and time?
@@ -110,11 +108,3 @@ FROM Purchasing.ProductVendor pv
 JOIN Purchasing.Vendor v ON pv.BusinessEntityID = v.BusinessEntityID
 WHERE v.Name = (SELECT BestVendor FROM BestVendor)
 GROUP BY v.Name;
-
-
-
-
-
-
-
-
